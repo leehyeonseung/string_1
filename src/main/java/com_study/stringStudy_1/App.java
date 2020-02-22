@@ -12,13 +12,13 @@ public class App
     {
     	//User DAO = 추상 클래스 이므로 객체를 직접 생성할 수 없다
     	// 그러므로 상속한 클래스를 주입해주어야 한다 ( user dao 에 class 앞에 abstract 가 있을 경우 에러)
-		 UserDao dao= new UserDao(new DConnectionMaker()); 
+		 UserDao dao= new DaoFactory().userDao(); 
     
       
        
        User user= new User();
-       user.setId("던킨22");
-       user.setName("도넛22");
+       user.setId("던킨2232");
+       user.setName("도넛2322");
        user.setPassword("8");
        
        dao.add(user);
