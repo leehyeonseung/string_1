@@ -10,7 +10,10 @@ public class App
 {
     public static void main( String[] args ) throws ClassNotFoundException, SQLException
     {
-       UserDao dao= new UserDao();
+    	//User DAO = 추상 클래스 이므로 객체를 직접 생성할 수 없다
+    	// 그러므로 상속한 클래스를 주입해주어야 한다
+       UserDao dao= new UserDao.NUserDao();
+      
        
        User user= new User();
        user.setId("던킨");
