@@ -11,13 +11,14 @@ public class App
     public static void main( String[] args ) throws ClassNotFoundException, SQLException
     {
     	//User DAO = 추상 클래스 이므로 객체를 직접 생성할 수 없다
-    	// 그러므로 상속한 클래스를 주입해주어야 한다
-       UserDao dao= new UserDao.NUserDao();
+    	// 그러므로 상속한 클래스를 주입해주어야 한다 ( user dao 에 class 앞에 abstract 가 있을 경우 에러)
+		 UserDao dao= new UserDao(); 
+    
       
        
        User user= new User();
-       user.setId("던킨");
-       user.setName("도넛");
+       user.setId("던킨2");
+       user.setName("도넛2");
        user.setPassword("8");
        
        dao.add(user);
