@@ -11,10 +11,13 @@ public class UserDao {
 	/* private SimpleConnectionMaker simpleConnectionMaker; */
 	 private ConnectionMaker connectionMaker;
 
-	public UserDao() {
+	public UserDao(ConnectionMaker connectionMaker) {
 
 		/* this.simpleConnectionMaker = new SimpleConnectionMaker(); */
-		this.connectionMaker = new DConnectionMaker();
+		/* this.connectionMaker = new DConnectionMaker(); */
+		this.connectionMaker = connectionMaker;
+			
+		
 	}
 
 	public void add(User user) throws ClassNotFoundException, SQLException {
