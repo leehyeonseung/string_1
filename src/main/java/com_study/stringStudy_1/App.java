@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 /**
  * Hello world!
@@ -31,11 +32,32 @@ public class App
     	// 인스턴스 생성 없이 바로 사용 가능하기 때문에
     	// 프로그램 내에서 공통으로 사용되는 데이터를 관리 할 때 이용한다
     	
-      ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+    	
+		/*
+		 * AnnotationConfigApplicationContext context = new
+		 * AnnotationConfigApplicationContext(CountingDaoFactory.class); UserDao dao =
+		 * context.getBean("userDao",UserDao.class);
+		 * 
+		 * User user= new User(); user.setId("치킨1"); user.setName("피자`");
+		 * user.setPassword("8");
+		 * 
+		 * dao.add(user);
+		 * 
+		 * System.out.println(user.getId()+"등록 성공");
+		 * 
+		 * User user2 = dao.get(user.getId()); System.out.println(user2.getName());
+		 * 
+		 * CountingConnectionMaker ccm= context.getBean("connectionMaker",
+		 * CountingConnectionMaker.class); //총 2번에 insert 와 select가 진행됐길 때문에 2번의 카운트가
+		 * 나온다 System.out.println("Connection counter" + ccm.getCounter());
+		 */
+        
+        
+      ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
       UserDao dao = context.getBean("userDao",UserDao.class);
        
        User user= new User();
-       user.setId("치킨1");
+       user.setId("치4242");
        user.setName("피자`");
        user.setPassword("8");
        
