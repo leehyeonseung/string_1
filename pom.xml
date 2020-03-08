@@ -20,6 +20,11 @@
    
    <!--repository 사용 -->
    <repositories>
+                <repository>
+         <id>oracle</id>
+         <name>ORACLE JDBC Repository</name>
+         <url>http://maven.jahia.org/maven2</url>
+      </repository>
       <repository>
          <id>codelds</id>
          <url>https://code.lds.org/nexus/content/groups/main-repo</url>
@@ -38,6 +43,14 @@
          <artifactId>ojdbc6</artifactId>
          <version>11.2.0.3</version>
       </dependency>
+            <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+      <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-jdbc</artifactId>
+          <version>${org.springframework-version}</version>
+      </dependency>
+      
+      
       <!-- Spring core -->
       <dependency>
          <groupId>org.springframework</groupId>

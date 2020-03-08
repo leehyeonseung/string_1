@@ -57,8 +57,8 @@ public class App
       UserDao dao = context.getBean("userDao",UserDao.class);
        
        User user= new User();
-       user.setId("치4242");
-       user.setName("피자`");
+       user.setId("치1");
+       user.setName("피자`2");
        user.setPassword("8");
        
        dao.add(user);

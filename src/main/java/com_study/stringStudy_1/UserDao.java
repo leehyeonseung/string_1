@@ -6,23 +6,34 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
+import org.springframework.context.annotation.Bean;
+
 public class UserDao {
 
 	/* private SimpleConnectionMaker simpleConnectionMaker; */
-	 private ConnectionMaker connectionMaker;
+	/* private ConnectionMaker connectionMaker; */
+	private DataSource dataSource;
 
-	public UserDao(ConnectionMaker connectionMaker) {
-
-		/* this.simpleConnectionMaker = new SimpleConnectionMaker(); */
-		/* this.connectionMaker = new DConnectionMaker(); */
-		this.connectionMaker = connectionMaker;
-			
-		
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
 	}
+
+	/*
+	 * public UserDao(ConnectionMaker connectionMaker) {
+	 * 
+	 * this.simpleConnectionMaker = new SimpleConnectionMaker();
+	 * this.connectionMaker = new DConnectionMaker(); this.connectionMaker =
+	 * connectionMaker;
+	 * 
+	 * 
+	 * }
+	 */
 
 	public void add(User user) throws ClassNotFoundException, SQLException {
 
-		Connection c = connectionMaker.makeConnection();
+		Connection c = dataSource.getConnection();
 
 		PreparedStatement ps = c.prepareStatement("INSERT INTO usertb(id, name, password) VALUES(?, ?, ?) ");
 
@@ -39,7 +50,7 @@ public class UserDao {
 	public User get(String id) throws ClassNotFoundException, SQLException {
 
 		/* Connection c = simpleConnectionMaker.getConnection(); */
-		Connection c = connectionMaker.makeConnection();
+		Connection c = dataSource.getConnection();
 
 		PreparedStatement ps = c.prepareStatement("SELECT * FROM usertb WHERE id=? ");
 
