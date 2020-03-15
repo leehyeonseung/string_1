@@ -21,6 +21,7 @@ public class DaoFactory {
 		/* return new UserDao(connectionMaker()); */
 		/* return new UserDao(dataSource()); */
 		UserDao userDao=new UserDao();
+		//UserDao userDao=new UserDaoDeleteAll();
 		userDao.setDataSource(dataSource());
 		return userDao;
 	}

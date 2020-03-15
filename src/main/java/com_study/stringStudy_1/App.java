@@ -2,8 +2,8 @@ package com_study.stringStudy_1;
 
 import java.sql.SQLException;
 
+import org.junit.runner.JUnitCore;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
 /**
@@ -11,11 +11,10 @@ import org.springframework.context.support.GenericXmlApplicationContext;
  *
  */
 
-
-public class App 
-{
-    public static void main( String[] args ) throws ClassNotFoundException, SQLException
-    {
+public class App {
+	public static void main( String[] args ) throws ClassNotFoundException, SQLException
+    {  
+		JUnitCore.main("com_study.stringStudy_1.UserDaoTest");
     	//User DAO = 추상 클래스 이므로 객체를 직접 생성할 수 없다
     	// 그러므로 상속한 클래스를 주입해주어야 한다 ( user dao 에 class 앞에 abstract 가 있을 경우 에러)
 		/* UserDao dao= new DaoFactory().userDao(); */
@@ -57,15 +56,32 @@ public class App
       UserDao dao = context.getBean("userDao",UserDao.class);
        
        User user= new User();
-       user.setId("치1");
-       user.setName("피자`2");
+       user.setId("1나무3");
+       user.setName("뿌리");
        user.setPassword("8");
        
        dao.add(user);
        
        System.out.println(user.getId()+"등록 성공");
+ 
        
-       User user2 = dao.get(user.getId());
+       // 1장까지 기본적으로 하는 테스트
+		
+		  User user2 = dao.get(user.getId()); 
        System.out.println(user2.getName());
+		  System.out.println(user2.getPassword());
+		  
+		  System.out.println(user2.getId()+ " 조회성공 ");
+		 
+       
+       //2장 테스트
+       if(!user.getName().equals(user2.getName())) {
+    	   System.out.println("테스트 실패 (name)");
+       }else if(!user.getPassword().equals(user2.getPassword())) {
+      System.out.println("테스트 실패  (password)");
+       }else {System.out.println("조회 테스트 성공");
     }
+  	 JUnitCore.main("com_study.stringStudy_1.UserDaoTest");
+ }
+ 
 }
