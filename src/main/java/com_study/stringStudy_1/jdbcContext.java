@@ -22,7 +22,7 @@ public class jdbcContext {
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
-
+    //템플릿
 	public void workWithStatementStrategy(StatementStrategy stmt) throws SQLException {
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -48,4 +48,15 @@ public class jdbcContext {
 			}
 		}
 	}
+	//3장 245p  리스트 3-27 실습
+	public void executeSql(final String query)throws SQLException {
+		workWithStatementStrategy(new StatementStrategy() {
+		public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+			
+			return c.prepareStatement(query);
+		}
+	});
+		
+	}
+	
 }
