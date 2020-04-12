@@ -1,56 +1,71 @@
 package com_study.stringStudy_1;
 
+
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.hamcrest.Matcher;
+import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
+import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import junit.framework.Assert;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/applicationContext.xml")
 @DirtiesContext
 public class UserDaoTest {
 	@Autowired
-	UserDao dao;
+	UserDaoJdbc dao;
 	
-	User user1;
-	User user2;
-	User user3;
+//	User user1;
+//	User user2;
+//	User user3;
+//	@Autowired
+//	SimpleDriverDataSource dataSource;
+	
 	@Autowired
-	SimpleDriverDataSource dataSource;
-	
-//	@Autowired
-//	DataSource dataSource;
+	DataSource dataSource;
 //	private UserDao dao;
-//	private User user1;
-//	private User user2;
-//	private User user3;
+	private User user1;
+	private User user2;
+	private User user3;
 	
-//	@Autowired
-//	private ApplicationContext context;
+	@Autowired
+	private ApplicationContext context;
 
 	
 	@Before
 	public void setUp() throws SQLException, ClassNotFoundException {
-//		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 //		this.dao = context.getBean("userDao", UserDao.class);
 //		this.dao = this.dao.getBean("userDao", UserDao.class);
-//		this.user1 = new User("1","2","3");
-//		this.user2= new User("3","4","5");
-//		this.user3 = new User("6","7","8");
-//		
-//		System.out.println(this.context);
-//		System.out.println(this);
+		this.dao= context.getBean("userDao",UserDaoJdbc.class);
+		this.user1 = new User("99","nn","2");
+		this.user2= new User("09","4","5");
+		this.user3 = new User("67","7","8");
+		
+		System.out.println(this.context);
+		System.out.println(this);
 	}
 	
 	
@@ -162,4 +177,32 @@ public class UserDaoTest {
 		assertThat(user1.getPassword(), is(user2.getPassword()));
 	}
 
+	@Test(expected = DataAccessException.class)
+	public void duplicatekey() {
+		dao.deleteAll();
+		
+		
+		dao.add(user1);
+		dao.add(user1);
+	
+	}
+	
+	@Test
+	public void sqlExceptionTranslate() {
+		dao.deleteAll();
+		
+		try {
+			dao.add(user1);
+			dao.add(user1);
+		}catch(DuplicateKeyException ex) {
+			SQLException sqlEx = (SQLException)ex.getRootCause();
+			SQLExceptionTranslator set = new SQLErrorCodeSQLExceptionTranslator(this.dataSource);
+			assertThat(set.translate(null, null, sqlEx), is(instanceOf(DuplicateKeyException.class)));
+		}
+	}
+
+
+
+
+	
 }

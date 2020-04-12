@@ -53,7 +53,7 @@ public class App {
         
         
       ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-      UserDao dao = context.getBean("userDao",UserDao.class);
+      UserDaoJdbc dao = context.getBean("userDao",UserDaoJdbc.class);
        
        User user= new User();
        user.setId("1나무3");
