@@ -10,8 +10,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
@@ -27,8 +24,6 @@ import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import junit.framework.Assert;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/applicationContext.xml")
@@ -60,44 +55,45 @@ public class UserDaoTest {
 //		this.dao = context.getBean("userDao", UserDao.class);
 //		this.dao = this.dao.getBean("userDao", UserDao.class);
 		this.dao= context.getBean("userDao",UserDaoJdbc.class);
-		this.user1 = new User("99","nn","2");
-		this.user2= new User("09","4","5");
-		this.user3 = new User("67","7","8");
+		this.user1 = new User("99","nn","2",Level.BASIC,1,0);
+		this.user2= new User("09","4","5",Level.SILVER,55,10);
+		this.user3 = new User("67","7","8",Level.GOLD,100,40);
 		
 		System.out.println(this.context);
 		System.out.println(this);
+		
 	}
 	
 	
-//	@Test
-//	public void addAndGet() throws SQLException, ClassNotFoundException {
+	@Test
+	public void addAndGet() throws SQLException, ClassNotFoundException {
+
+//		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+//		UserDao dao = context.getBean("userDao", UserDao.class);
+		// User user = new User("babo", "우우", "321");
+//		User user1 = new User("d2","4","5",Level.SILVER,2,3);
+//		User user2 = new User("d3","7","8",Level.GOLD,3,4);
+		dao.deleteAll();
+		assertThat(dao.getCount(), is(0));
+
+		/* User user= new User(); */
+//		user.setId("나42");
+//		user.setName("뿌리42");
+//		user.setPassword("8");
 //
-////		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-////		UserDao dao = context.getBean("userDao", UserDao.class);
-//		// User user = new User("babo", "우우", "321");
-//		User user1 = new User("babo", "우우", "2");
-//		User user2 = new User("ba1o", "우우1", "1");
-//		dao.deleteAll();
-//		assertThat(dao.getCount(), is(0));
-//
-//		/* User user= new User(); */
-////		user.setId("나42");
-////		user.setName("뿌리42");
-////		user.setPassword("8");
-////
-////		dao.add(user);
-//		dao.add(user1);
-//		dao.add(user2);
+//		dao.add(user);
+		dao.add(user1);
+		dao.add(user2);
 //		assertThat(dao.getCount(), is(2));
-//
-////		System.out.println(user.getId() + "등록 성공");
-//
-//		// 1장까지 기본적으로 하는 테스트
-//
-////		User user2 = dao.get(user.getId());
-////		assertThat(user2.getName(), is(user.getName()));
-////		assertThat(user2.getPassword(), is(user.getPassword()));
-//
+
+//		System.out.println(user.getId() + "등록 성공");
+
+		// 1장까지 기본적으로 하는 테스트
+
+//		User user2 = dao.get(user.getId());
+//		assertThat(user2.getName(), is(user.getName()));
+//		assertThat(user2.getPassword(), is(user.getPassword()));
+
 //		// 2장 테스트
 //		User userget1 = dao.get(user1.getId());
 //		assertThat(user1.getName(), is(user1.getName()));
@@ -109,7 +105,13 @@ public class UserDaoTest {
 //		// 191p 리스트2-20 테스트
 //		DataSource dataSource = new SingleConnectionDataSource("Jdbc:oracle:thin:@nacinaci.cafe24.com:1522:xe","hr","hr", true);
 //		dao.setDataSource(dataSource);
-//	}
+		
+		User userget1 = dao.get(user1.getId());
+		checkSameUser(userget1, user1);
+		
+		User userget2 = dao.get(user2.getId());
+		checkSameUser(userget2, user2);
+	}
 
 //	@Test
 //	public void count() throws SQLException, ClassNotFoundException {
@@ -172,9 +174,15 @@ public class UserDaoTest {
 		assertThat(users0.size(), is(0));
 	}
 	private void checkSameUser(User user1, User user2 ) {
+		System.out.println("1111111111111111111"+user1.getRecommend());
+		System.out.println("2222222222222222"+user2.getRecommend());
 		assertThat(user1.getId(), is(user2.getId()));
 		assertThat(user1.getName(), is(user2.getName()));
 		assertThat(user1.getPassword(), is(user2.getPassword()));
+		assertThat(user1.getLevelInt(), is(user2.getLevelInt()));
+		assertThat(user1.getLogin(), is(user2.getLogin()));
+		assertThat(user1.getRecommend(), is(user2.getRecommend()));
+		
 	}
 
 	@Test(expected = DataAccessException.class)
@@ -201,8 +209,38 @@ public class UserDaoTest {
 		}
 	}
 
-
-
+	@Test
+	public void update() {
+		dao.deleteAll();
+		
+		dao.add(user1);
+		dao.add(user2);
+//		dao.add(user3);
+		
+		user1.setName("die");
+		user1.setPassword("9");
+		user1.setLevelInt(Level.GOLD);
+		user1.setLogin(1000);
+		user1.setRecommend(999);
+		dao.update(user1);
+		
+//		user2.setName("de");
+//		user2.setPassword("9");
+//		user2.setLevelInt(Level.GOLD);
+//		user2.setLogin(1000);
+//		user2.setRecommend(999);
+//		dao.update(user2);
+		
+		
+		User user1update = dao.get(user1.getId());
+		checkSameUser(user1, user1update);
+		
+		User user2same = dao.get(user2.getId());
+		checkSameUser(user2, user2same);
+		
+//		User user3same = dao.get(user3.getId());
+//		checkSameUser(user3, user3same);
+	}
 
 	
 }

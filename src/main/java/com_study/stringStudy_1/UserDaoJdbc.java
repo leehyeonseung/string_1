@@ -421,6 +421,9 @@ public class UserDaoJdbc implements UserDao {
 			user.setId(rs.getString("id"));
 			user.setName(rs.getString("name"));
 			user.setPassword(rs.getString("password"));
+			user.setLevelInt(Level.valueOf(rs.getInt("LevelInt")));
+			user.setLogin(rs.getInt("Login"));
+			user.setRecommend(rs.getInt("Recommend"));
 			return user;
 		}
 	};
@@ -449,16 +452,30 @@ public class UserDaoJdbc implements UserDao {
 	
 	//4장 예외 - 리스트 4-17 JdbcTemplate 이 제공하는 예외 전환 기능을 이용하는 add()메소드
 	//4장 예외 - 리스트 4-18 중복 키 예외의 전환
-	public void add(final User user) throws DuplicateKeyException {
-		//jdbcTemplate를 이용해 User를 add하는 코드
-		this.jdbcTemplate.update("INSERT INTO usertb(id, name, password) VALUES(?, ?, ?)", user.getId(), user.getName(),
-				user.getPassword());
-		/*
-		 * try { //jdbcTemplate를 이용해 User를 add하는 코드 this.jdbcTemplate.
-		 * update("INSERT INTO usertb(id, name, password) VALUES(?, ?, ?)",
-		 * user.getId(), user.getName(), user.getPassword());
-		 * }catch(DuplicateKeyException e) { //로그를 남기는 등의 필요한 작업 throw new
-		 * DuplicateUserIdException(e); }
-		 */	
+//	public void add(final User user) throws DuplicateKeyException {
+//		//jdbcTemplate를 이용해 User를 add하는 코드
+//		this.jdbcTemplate.update("INSERT INTO usertb(id, name, password) VALUES(?, ?, ?)", user.getId(), user.getName(),
+//				user.getPassword());
+//		/*
+//		 * try { //jdbcTemplate를 이용해 User를 add하는 코드 this.jdbcTemplate.
+//		 * update("INSERT INTO usertb(id, name, password) VALUES(?, ?, ?)",
+//		 * user.getId(), user.getName(), user.getPassword());
+//		 * }catch(DuplicateKeyException e) { //로그를 남기는 등의 필요한 작업 throw new
+//		 * DuplicateUserIdException(e); }
+//		 */	
+//	}
+	
+	//5장 서비스 추상화  리스트5-9 추가된 필드를 위한 UserDaoJdbc 수정 코드
+	public void add(User user) {		
+		this.jdbcTemplate.update(			
+			"INSERT INTO usertb(id ,name ,password ,LevelInt ,Login ,Recommend) " +
+		    "VALUES (? ,? ,? ,? ,? ,?)", user.getId(), user.getName(),
+		    user.getPassword(), user.LevelInt.intValue(), user.getLogin(), user.getRecommend()
+		);	
+	}
+	
+	public void update(User user) {
+		this.jdbcTemplate.update("UPDATE usertb SET name=? ,password=? ,LevelInt=? ,Login=? ," +
+	                             "Recommend=? WHERE id= ?",user.getName(),user.getPassword(),user.getLevelInt().intValue(),user.getLogin(),user.getRecommend(),user.getId());
 	}
 }

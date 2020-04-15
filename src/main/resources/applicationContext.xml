@@ -7,11 +7,10 @@
 		<bean id="connectionMaker" class="com_study.stringStudy_1.DConnectionMaker"/> 
 		<bean id="localDBConnectionMaker" class="com_study.stringStudy_1.LocalDBConnectionMaker"></bean>
 		
+	<bean id = "userService" class="com_study.stringStudy_1.UserService">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
 
-	
-
-	
-	
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 	 <property name="driverClass" value="oracle.jdbc.driver.OracleDriver"/>
 	 <property name="url" value="Jdbc:oracle:thin:@nacinaci.cafe24.com:1522:xe"/>

@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/applicationContext.xml")
 @DirtiesContext
-public class UserDaoDeleteAll extends UserDao {
+public class UserDaoDeleteAll extends UserDaoJdbc {
 
 	@Test
 	protected PreparedStatement makeStatement(Connection c) throws SQLException {
