@@ -31,5 +31,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="C:/Users/이현승/Downloads/spring-tx-4.3.7.RELEASE.jar"/>
 	<classpathentry kind="lib" path="C:/Users/이현승/Downloads/spring-test-4.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Users/이현승/Downloads/com.springsource.javax.activation-1.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/이현승/Downloads/com.springsource.javax.mail-1.4.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

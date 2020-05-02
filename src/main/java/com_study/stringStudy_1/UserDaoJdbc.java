@@ -34,19 +34,19 @@ public class UserDaoJdbc implements UserDao {
 //	private JdbcTemplate jdbcTemplate;
 //	
 //	//3장 3-25 JdbcContext 생성과 DI 작업을 수행하는 setDataSource()메소드
-//	public void setDataSource(DataSource dataSource) { // 생상저 메소드이면서 jdbcCOntextㅇ 대한 생성
-//														// DI 작업을 동시에 수행한다.
-////		this.jdbcContext = new jdbcContext(); //jdbcContext  생성 (Ioc)
-////		
-////		this.jdbcContext.setDataSource(dataSource); // 의존 오브젝트 주입 DI
+	public void setDataSource(DataSource dataSource) { // 생상저 메소드이면서 jdbcCOntextㅇ 대한 생성
+														// DI 작업을 동시에 수행한다.
+//		this.jdbcContext = new jdbcContext(); //jdbcContext  생성 (Ioc)
 //		
-//		//3장 템플릿 260p 리스트 3-45 실습
-//		//->DataSource 오브젝트는 jdbcTemplate을 만든 후에는 사용하지 않으니 저장해두지 않아도 된다.
-//		this.jdbcTemplate = new JdbcTemplate(dataSource);
-////		this.dataSource = dataSource;
-////		
-////		this.dataSource = dataSource;
-//	}
+//		this.jdbcContext.setDataSource(dataSource); // 의존 오브젝트 주입 DI
+		
+		//3장 템플릿 260p 리스트 3-45 실습
+		//->DataSource 오브젝트는 jdbcTemplate을 만든 후에는 사용하지 않으니 저장해두지 않아도 된다.
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+//		this.dataSource = dataSource;
+//		
+//		this.dataSource = dataSource;
+	}
 //
 //	/*
 //	 * public UserDao(ConnectionMaker connectionMaker) {
@@ -424,6 +424,7 @@ public class UserDaoJdbc implements UserDao {
 			user.setLevelInt(Level.valueOf(rs.getInt("LevelInt")));
 			user.setLogin(rs.getInt("Login"));
 			user.setRecommend(rs.getInt("Recommend"));
+			user.setEmail(rs.getString("email"));
 			return user;
 		}
 	};
@@ -468,14 +469,14 @@ public class UserDaoJdbc implements UserDao {
 	//5장 서비스 추상화  리스트5-9 추가된 필드를 위한 UserDaoJdbc 수정 코드
 	public void add(User user) {		
 		this.jdbcTemplate.update(			
-			"INSERT INTO usertb(id ,name ,password ,LevelInt ,Login ,Recommend) " +
-		    "VALUES (? ,? ,? ,? ,? ,?)", user.getId(), user.getName(),
-		    user.getPassword(), user.LevelInt.intValue(), user.getLogin(), user.getRecommend()
+			"INSERT INTO usertb(id ,name ,password ,LevelInt ,Login ,Recommend,email) " +
+		    "VALUES (? ,? ,? ,? ,? ,?,?)", user.getId(), user.getName(),
+		    user.getPassword(), user.LevelInt.intValue(), user.getLogin(), user.getRecommend(),user.getEmail()
 		);	
 	}
 	
 	public void update(User user) {
-		this.jdbcTemplate.update("UPDATE usertb SET name=? ,password=? ,LevelInt=? ,Login=? ," +
-	                             "Recommend=? WHERE id= ?",user.getName(),user.getPassword(),user.getLevelInt().intValue(),user.getLogin(),user.getRecommend(),user.getId());
+		this.jdbcTemplate.update("UPDATE usertb SET name=? ,password=? ,LevelInt=? ,Login=?, email=?," +
+	                             "Recommend=? WHERE id= ?",user.getName(),user.getPassword(),user.getLevelInt().intValue(),user.getLogin(),user.getEmail(),user.getRecommend(),user.getId());
 	}
 }

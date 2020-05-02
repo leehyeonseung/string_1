@@ -11,6 +11,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/applicationContext.xml")
@@ -51,13 +53,13 @@ public class UserDaoTest {
 	
 	@Before
 	public void setUp() throws SQLException, ClassNotFoundException {
-		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		//ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 //		this.dao = context.getBean("userDao", UserDao.class);
 //		this.dao = this.dao.getBean("userDao", UserDao.class);
-		this.dao= context.getBean("userDao",UserDaoJdbc.class);
-		this.user1 = new User("99","nn","2",Level.BASIC,1,0);
-		this.user2= new User("09","4","5",Level.SILVER,55,10);
-		this.user3 = new User("67","7","8",Level.GOLD,100,40);
+		//this.dao= context.getBean("userDao",UserDaoJdbc.class);
+		this.user1 = new User("99","nn","2",Level.BASIC,1,0,"xhdnckdn@hanmail.net");
+		this.user2= new User("09","4","5",Level.SILVER,55,10,"xhdnckdn@naver.com");
+		this.user3 = new User("67","7","8",Level.GOLD,100,40,"rmflstmzls@gamil.com");
 		
 		System.out.println(this.context);
 		System.out.println(this);
@@ -66,6 +68,7 @@ public class UserDaoTest {
 	
 	
 	@Test
+	@Ignore
 	public void addAndGet() throws SQLException, ClassNotFoundException {
 
 //		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
@@ -139,6 +142,7 @@ public class UserDaoTest {
 //	}
 
 	@Test(expected = EmptyResultDataAccessException.class)
+	@Ignore
 	public void getUserFailure() throws SQLException, ClassNotFoundException {
 //		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 //		UserDao dao = context.getBean("userDao", UserDao.class);
@@ -148,6 +152,7 @@ public class UserDaoTest {
 	}
 	
 	@Test
+	@Ignore
 	public void getAll() throws SQLException, ClassNotFoundException {
 		dao.deleteAll();
 		
@@ -174,8 +179,13 @@ public class UserDaoTest {
 		assertThat(users0.size(), is(0));
 	}
 	private void checkSameUser(User user1, User user2 ) {
-		System.out.println("1111111111111111111"+user1.getRecommend());
-		System.out.println("2222222222222222"+user2.getRecommend());
+		
+		
+		System.out.println("1"+user1.toString());
+
+		
+		
+		
 		assertThat(user1.getId(), is(user2.getId()));
 		assertThat(user1.getName(), is(user2.getName()));
 		assertThat(user1.getPassword(), is(user2.getPassword()));
@@ -186,6 +196,7 @@ public class UserDaoTest {
 	}
 
 	@Test(expected = DataAccessException.class)
+	@Ignore
 	public void duplicatekey() {
 		dao.deleteAll();
 		
@@ -196,6 +207,7 @@ public class UserDaoTest {
 	}
 	
 	@Test
+	@Ignore
 	public void sqlExceptionTranslate() {
 		dao.deleteAll();
 		
@@ -212,7 +224,7 @@ public class UserDaoTest {
 	@Test
 	public void update() {
 		dao.deleteAll();
-		
+		System.out.println(user1.toString()+"4");
 		dao.add(user1);
 		dao.add(user2);
 //		dao.add(user3);
@@ -222,8 +234,9 @@ public class UserDaoTest {
 		user1.setLevelInt(Level.GOLD);
 		user1.setLogin(1000);
 		user1.setRecommend(999);
+		System.out.println("update be"+user1.toString());
 		dao.update(user1);
-		
+		System.out.println("update af"+user1.toString());
 //		user2.setName("de");
 //		user2.setPassword("9");
 //		user2.setLevelInt(Level.GOLD);

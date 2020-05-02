@@ -3,51 +3,72 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
 
-		<beans>
-		<bean id="connectionMaker" class="com_study.stringStudy_1.DConnectionMaker"/> 
-		<bean id="localDBConnectionMaker" class="com_study.stringStudy_1.LocalDBConnectionMaker"></bean>
-		
-	<bean id = "userService" class="com_study.stringStudy_1.UserService">
-		<property name="userDao" ref="userDao"></property>
-	</bean>
+	<beans>
+		<bean id="connectionMaker"
+			class="com_study.stringStudy_1.DConnectionMaker" />
+		<bean id="localDBConnectionMaker"
+			class="com_study.stringStudy_1.LocalDBConnectionMaker"></bean>
+		<bean id="transactionManager"
+			class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+			<property name="dataSource" ref="dataSource" />
+		</bean>
 
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-	 <property name="driverClass" value="oracle.jdbc.driver.OracleDriver"/>
-	 <property name="url" value="Jdbc:oracle:thin:@nacinaci.cafe24.com:1522:xe"/>
-	 <property name="username" value="hr"/>
-	 <property name="password" value="hr"/>
-	</bean>
+
+
+		<bean id="userService"
+			class="com_study.stringStudy_1.UserService">
+			<property name="userDao" ref="userDao" />
+			<property name="transactionManager" ref="transactionManager" />
+			<property name="mailSender" ref="mailSender" />
+		</bean>
+
+		<bean id="mailSender"
+			class="com_study.stringStudy_1.UserService.DummyMaileSender">
+			<!-- <property name="host" value="mail.server.com" /> -->
+		</bean>
+
+		<bean id="dataSource"
+			class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+			<property name="driverClass"
+				value="oracle.jdbc.driver.OracleDriver" />
+			<property name="url"
+				value="Jdbc:oracle:thin:@nacinaci.cafe24.com:1522:xe" />
+			<property name="username" value="hr" />
+			<property name="password" value="hr" />
+		</bean>
 		<!-- 쿼리를 실행하는 클래스 -->
-	 <bean id="userDao" class="com_study.stringStudy_1.UserDaoJdbc"> 
-	<!-- 책에서는 setter형식의 주입을 사용하기 때문에 property를 사용하여 주입하였다 
-            그러나 우리는 생성자 형식으로 주입받기에 Constructor방식의 주입을 사용한다.
-         -->
-	 	<!-- <constructor-arg name="connectionMaker" ref="connectionMaker"/> -->
-	 	<constructor-arg name="dataSource" ref="dataSource"></constructor-arg>
-	</bean>
+		<bean id="userDao" class="com_study.stringStudy_1.UserDaoJdbc">
+			<!-- 책에서는 setter형식의 주입을 사용하기 때문에 property를 사용하여 주입하였다 그러나 우리는 생성자 형식으로 
+				주입받기에 Constructor방식의 주입을 사용한다. -->
+			<!-- <constructor-arg name="connectionMaker" ref="connectionMaker"/> -->
+			<constructor-arg name="dataSource" ref="dataSource"></constructor-arg>
+		</bean>
 
-	<bean id="Oracle" class="org.springframework.jdbc.support.SQLErrorCodes">
-	<property name="badSqlGrammarCodes">
-	<value>900,903,904,917,936,942,17006 </value>
-	</property>
-	
-	<property name="invalidResultSetAccessCodes">
-	<value>17003</value>
-	</property>
-	
-	<property name="duplicateKeyCodes">
-	<value>1</value>
-	</property>
-	
-	<property name="dataIntegrityViolationCodes">
-	<value>1400,1722,2291,2292</value>
-	</property>
-	
-	<property name="dataAccessResourceFailureCodes">
-	<value>17002,17447</value>
-	</property>
-	</bean>
-	
-	
- </beans>
+
+
+		<bean id="Oracle"
+			class="org.springframework.jdbc.support.SQLErrorCodes">
+			<property name="badSqlGrammarCodes">
+				<value>900,903,904,917,936,942,17006 </value>
+			</property>
+
+			<property name="invalidResultSetAccessCodes">
+				<value>17003</value>
+			</property>
+
+			<property name="duplicateKeyCodes">
+				<value>1</value>
+			</property>
+
+			<property name="dataIntegrityViolationCodes">
+				<value>1400,1722,2291,2292</value>
+			</property>
+
+			<property name="dataAccessResourceFailureCodes">
+				<value>17002,17447</value>
+			</property>
+		</bean>
+
+
+	</beans>
 </beans>
